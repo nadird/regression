@@ -153,7 +153,7 @@ function process($unalignedsequences) {
 	$file = "sequencesUnaln.tmp";
 	$result = file_put_contents($file, implode("\n", $sequences2));
 	$output = shell_exec("python3 predict.py " . escapeshellarg($file) . " 2>&1");
-	$sub_str = "CodeBegin";
+	$sub_str = $output;
 
 	$output = strstr($output, $sub_str, false);
 	$output = str_replace($sub_str, "", $output);
