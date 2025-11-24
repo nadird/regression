@@ -354,6 +354,6 @@ unset($_SESSION["error"]); // Supprimer le message d'erreur après affichage
 </body>
 <footer>
     <p>&copy; <?php echo "2025"; ?> - Mohamed Skander Daas</p>
-    <p>Last modified: <?php echo "August 7, 2025"; ?></p>
+    <p>Last modified: <?php echo "November 24, 2025"; ?></p>
 </footer>
 </html>
