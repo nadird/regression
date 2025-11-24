@@ -4,7 +4,7 @@ $text = "<h2>Notes :</h2>
 <ul>
     <li>The entropy score for an alignment (a set of aligned sequences) is a measure of the variability at each position in the alignment. It quantifies the uncertainty or disorder in the sequence data. In the context of multiple sequence alignments (MSA), entropy is often used to evaluate conservation levels across aligned positions. A low entropy value indicates a highly conserved position where most sequences share the same character, suggesting functional or structural importance. Conversely, a high entropy value signifies greater variability, meaning the position is less conserved. This metric helps assess the reliability and significance of an alignment, particularly in evolutionary and structural biology studies. The function used is the one from the pymsa library in Python.</li>
     <li>In progress bars, we consider entropy values between 0 and 7000, which cover most cases (until 102 sequences by file and sequence lengths until 1200).</li>
-    <li>Some examples of unaligned sequences and their reference aligned sequences from the Balibase R10 benchmark (218 pairs of files) are available at this link:  <a href='https://drive.google.com/drive/folders/1ajZxjx-vI15GjqeEQtBmHLZ93gN_Nrky?usp=drive_link'>Click here</a></li>
+    <li>Some examples of unaligned sequences and their reference aligned sequences from the HOMSTARD benchmark (233 pairs of files) are available at this link:  <a href='https://zenodo.org/records/16759607/files/HOMSTARD.zip?download=1'>Click here</a></li>
 	
 
 	
@@ -113,6 +113,7 @@ function isValidFasta2($content) {
             }
             $sequenceCount++;
         } else {
+			$line = strtoupper($line);   // Convert sequence to uppercase
             // Check if the sequence contains only valid characters
             if (strspn($line, $validCharacters) !== strlen($line)) {
                 return "Error in aligned sequences : Sequence contains invalid characters.";
@@ -152,8 +153,9 @@ function process($unalignedsequences) {
 	
 	$file = "sequencesUnaln.tmp";
 	$result = file_put_contents($file, implode("\n", $sequences2));
-	$output = shell_exec("python3 predict.py " . escapeshellarg($file) . " 2>&1");
-    print_r($output);
+	
+	$output = shell_exec("/home/nour_belghobsi/ml_env/bin/python predict.py " . escapeshellarg($file) . " 2>&1");
+	//$_SESSION["error"] = $output;
 	$sub_str = "CodeBegin";
 
 	$output = strstr($output, $sub_str, false);
@@ -167,6 +169,7 @@ function process($unalignedsequences) {
 		return $results[0];
 		//ob_clean(); // Efface le buffer de sortie avant d'envoyer les headers
 		//header("Location: index.php?resultA=$resultA");
+
 }
 
 function calculate($alignedsequences) {
@@ -177,7 +180,7 @@ function calculate($alignedsequences) {
 
 	$file = "sequencesAlign.tmp";
 	file_put_contents($file, implode("\n", $sequences2)); 
-	$output = shell_exec("python3 msascorecalculate.py " . escapeshellarg($file));
+	$output = shell_exec("/home/nour_belghobsi/ml_env/bin/python msascorecalculate.py " . escapeshellarg($file));
 	// Split the output by comma to get individual results
 	$results = explode(",", $output);
 	$results[0]=trim($results[0]," []\n\r\t\v\x00");
@@ -355,6 +358,6 @@ unset($_SESSION["error"]); // Supprimer le message d'erreur après affichage
 </body>
 <footer>
     <p>&copy; <?php echo "2025"; ?> - Mohamed Skander Daas</p>
-    <p>Last modified: <?php echo "November 24, 2025"; ?></p>
+    <p>Last modified: <?php echo "August 7, 2025"; ?></p>
 </footer>
 </html>
